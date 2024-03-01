@@ -15,8 +15,6 @@ from steps.split_data import split_data
 
 @pipeline
 def training_pipeline(data_path: str) -> pd.DataFrame:
-    df = ingest_data(data_path=data_path)
-    df = clean_data(df=df)
-    df = label_data(df=df)
-    df = preprocess_data(df=df)
-    X_train, X_val, X_test, y_train, y_val, y_test = split_data(df, test_size=0.3)
+    data = ingest_data(data_path=data_path)
+    X_train, X_val, y_train, y_val = preprocess_data(data)
+    
