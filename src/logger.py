@@ -4,19 +4,24 @@ import logging
 class Logger:
     """Class for logging"""
 
-    def __init__(self):
-        """Initialize `Logger` object"""
-        self.log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        self.logging.basicConfig(level=logging.INFO, format=log_fmt)
-
-    def get_logger(self, logger_name: str) -> logging.Logger:
-        """Get logger object
+    def __init__(self, logger_name: str) -> None:
+        """Initialize `Logger` object
 
         Args:
             logger_name (str): logger name
 
         Returns:
+            None
+        """
+        self.log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        logging.basicConfig(level=logging.INFO, format=log_fmt)
+        self.logger_name = logger_name
+
+    def get_logger(self) -> logging.Logger:
+        """Get logger object
+
+        Returns:
             logging.Logger: logger
         """
-        logger = logging.getLogger(logger_name)
-        return logger
+        self.logger = logging.getLogger(self.logger_name)
+        return self.logger
