@@ -1,0 +1,15 @@
+artifact_uri: file:///d:/Documents/GitHub/amazon-product-reviews-sentiment-analysis/notebooks/mlruns/298214186916312490/a145aadec4134a748017a1039adb9960/artifacts
+end_time: 1709202183740
+entry_point_name: ''
+experiment_id: '298214186916312490'
+lifecycle_stage: active
+run_id: a145aadec4134a748017a1039adb9960
+run_name: countvec-multinomialnb-run
+run_uuid: a145aadec4134a748017a1039adb9960
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1709202180434
+status: 3
+tags: []
+user_id: '923006079'
