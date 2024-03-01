@@ -13,7 +13,7 @@ class Logger:
         Returns:
             None
         """
-        self.log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        log_fmt = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
         logging.basicConfig(level=logging.INFO, format=log_fmt)
         self.logger_name = logger_name
 
