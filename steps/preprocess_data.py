@@ -14,30 +14,33 @@ from src.data.data_preprocessing import DataPreprocessing
 
 
 @step
-def preprocess_data(data: pd.DataFrame) -> Tuple[
-    Annotated[pd.DataFrame, "X_train"], 
-    Annotated[pd.DataFrame, "X_val"], 
-    Annotated[pd.Series, "y_train"], 
-    Annotated[pd.Series, "y_val"]
+def preprocess_data(
+    data: pd.DataFrame,
+) -> Tuple[
+    Annotated[pd.DataFrame, "X_train"],
+    Annotated[pd.DataFrame, "X_val"],
+    Annotated[pd.Series, "y_train"],
+    Annotated[pd.Series, "y_val"],
 ]:
     """
     Perform data preprocessing from data cleaning, data labeling, text preprocessing, and data splitting
-    
+
     Args:
         data (pd.DataFrame): data
 
     Returns:
-        pd.DataFrame: X_train 
-        pd.DataFrame: X_val 
-        pd.Series: y_train 
+        pd.DataFrame: X_train
+        pd.DataFrame: X_val
+        pd.Series: y_train
         pd.Series: y_val
     """
     preprocess_strategy = DataPreprocessStrategy()
     data_preprocessing = DataPreprocessing(data=data, strategy=preprocess_strategy)
     preprocessed_data = data_preprocessing.handle_data()
-    
+
     preprocess_strategy = DataSplitStrategy()
-    data_preprocessing = DataPreprocessing(data=preprocessed_data, strategy=preprocess_strategy)
+    data_preprocessing = DataPreprocessing(
+        data=preprocessed_data, strategy=preprocess_strategy
+    )
     X_train, X_test, y_train, y_test = data_preprocessing.handle_data()
-    
     return X_train, X_test, y_train, y_test
