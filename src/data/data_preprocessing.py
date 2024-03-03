@@ -1,5 +1,3 @@
-import os
-import sys
 import string
 import pandas as pd
 from abc import ABC, abstractmethod
@@ -7,12 +5,8 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from sklearn.model_selection import train_test_split
-from dotenv import find_dotenv, load_dotenv
+from zenml.logger import get_logger
 from typing import Union
-
-load_dotenv(find_dotenv())
-sys.path.append(os.getenv("PROJECT_FOLDER"))
-from src.logger import Logger
 
 
 class DataStrategy(ABC):
@@ -33,7 +27,7 @@ class DataPreprocessStrategy(DataStrategy):
         self.lemmatizer = WordNetLemmatizer()
         self.stopwords_en = stopwords.words("english")
         self.punctuations = string.punctuation
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def preprocess_text(self, text: str) -> str:
         """
@@ -108,7 +102,7 @@ class DataSplitStrategy(DataStrategy):
         Initialize `DataPreprocessStrategy` class
         """
         super().__init__()
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def handle_data(self, data: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
         """Split data into training and validation
@@ -135,7 +129,7 @@ class DataPreprocessing:
     def __init__(self, data: pd.DataFrame, strategy: DataStrategy):
         self.data = data
         self.strategy = strategy
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def handle_data(self) -> Union[pd.DataFrame, pd.Series]:
         """_summary_

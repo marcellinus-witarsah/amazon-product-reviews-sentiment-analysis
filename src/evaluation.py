@@ -1,16 +1,10 @@
-import os
-import sys
 import pandas as pd
 import numpy as np
 from abc import ABC, abstractmethod
 from typing import Union
 from dotenv import find_dotenv, load_dotenv
+from zenml.logger import get_logger
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
-# Insert project folder into Python System
-load_dotenv(find_dotenv())
-sys.path.append(os.getenv("PROJECT_FOLDER"))
-from src.logger import Logger
 
 
 class Evaluation(ABC):
@@ -29,7 +23,7 @@ class Evaluation(ABC):
 
 class Accuracy(Evaluation):
     def __init__(self) -> None:
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def calculate_score(
         self,
@@ -47,7 +41,7 @@ class Accuracy(Evaluation):
 
 class Recall(Evaluation):
     def __init__(self) -> None:
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def calculate_score(
         self,
@@ -65,7 +59,7 @@ class Recall(Evaluation):
 
 class Precision(Evaluation):
     def __init__(self) -> None:
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def calculate_score(
         self,
@@ -83,7 +77,7 @@ class Precision(Evaluation):
 
 class F1(Evaluation):
     def __init__(self) -> None:
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def calculate_score(
         self,

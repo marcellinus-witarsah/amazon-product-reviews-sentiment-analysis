@@ -1,5 +1,3 @@
-import os
-import sys
 import pandas as pd
 from typing import Union
 from abc import ABC, abstractmethod
@@ -7,11 +5,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.base import ClassifierMixin
-from dotenv import find_dotenv, load_dotenv
-
-load_dotenv(find_dotenv())
-sys.path.append(os.getenv("PROJECT_FOLDER"))
-from src.logger import Logger
+from zenml.logger import get_logger
 
 
 class Model(ABC):
@@ -25,7 +19,7 @@ class Model(ABC):
 
         Args:
             X_train : Training data
-            y_train : Trainign labels
+            y_train : Training labels
         Returns:
             None
         """
@@ -34,14 +28,14 @@ class Model(ABC):
 
 class CountVectorizerMultinomialNB(Model):
     def __init__(self) -> None:
-        self.logger = Logger.get_logger(__name__)
+        self.logger = get_logger(__name__)
 
     def train(
         self,
         X_train: Union[pd.DataFrame, pd.Series],
         y_train: Union[pd.DataFrame, pd.Series],
         **params
-    ) -> Pipeline:
+    ) -> Union[Pipeline, ClassifierMixin]:
         """Train model
 
         Args:
