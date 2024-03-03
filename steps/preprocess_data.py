@@ -18,9 +18,9 @@ def preprocess_data(
     data: pd.DataFrame,
 ) -> Tuple[
     Annotated[pd.DataFrame, "X_train"],
-    Annotated[pd.DataFrame, "X_val"],
+    Annotated[pd.DataFrame, "X_test"],
     Annotated[pd.Series, "y_train"],
-    Annotated[pd.Series, "y_val"],
+    Annotated[pd.Series, "y_test"],
 ]:
     """
     Perform data preprocessing from data cleaning, data labeling, text preprocessing, and data splitting
@@ -30,9 +30,9 @@ def preprocess_data(
 
     Returns:
         pd.DataFrame: X_train
-        pd.DataFrame: X_val
+        pd.DataFrame: X_test
         pd.Series: y_train
-        pd.Series: y_val
+        pd.Series: y_test
     """
     preprocess_strategy = DataPreprocessStrategy()
     data_preprocessing = DataPreprocessing(data=data, strategy=preprocess_strategy)
