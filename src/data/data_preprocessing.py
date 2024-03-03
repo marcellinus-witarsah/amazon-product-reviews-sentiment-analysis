@@ -14,25 +14,27 @@ load_dotenv(find_dotenv())
 sys.path.append(os.getenv("PROJECT_FOLDER"))
 from src.logger import Logger
 
+
 class DataStrategy(ABC):
     """
     Abstract class for defining strategy to handle data
     """
+
     @abstractmethod
     def handle_data(self, data: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
         pass
-    
+
+
 class DataPreprocessStrategy(DataStrategy):
     def __init__(self) -> None:
         """
         Initialize `DataPreprocessStrategy` class
         """
-        super().__init__()
         self.lemmatizer = WordNetLemmatizer()
         self.stopwords_en = stopwords.words("english")
         self.punctuations = string.punctuation
-        self.logger = Logger(__name__).get_logger()
-    
+        self.logger = Logger.get_logger(__name__)
+
     def preprocess_text(self, text: str) -> str:
         """
         Preprocess text
@@ -44,9 +46,7 @@ class DataPreprocessStrategy(DataStrategy):
             str: text
         """
         text = text.lower()  # normalize text
-        tokens = word_tokenize(
-            text
-        )  # tokenize text
+        tokens = word_tokenize(text)  # tokenize text
         filtered_tokens = [
             token
             for token in tokens
@@ -56,8 +56,7 @@ class DataPreprocessStrategy(DataStrategy):
             self.lemmatizer.lemmatize(token) for token in filtered_tokens
         ]  # lemmatize tokens
         return " ".join(lemmatized_tokens)
-        
-        
+
     def handle_data(self, data: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
         """
         Handle data preprocessing (data cleaning, data labeling, and text preprocessing)
@@ -68,7 +67,7 @@ class DataPreprocessStrategy(DataStrategy):
         Returns:
             Union[pd.DataFrame, pd.Series]: preprocessed data
         """
-        try: 
+        try:
             # Data Cleaning
             self.logger.info(f"Cleaning Data ...")
             data = data.drop_duplicates()  # drop duplicates
@@ -76,15 +75,17 @@ class DataPreprocessStrategy(DataStrategy):
                 subset=["reviewText"], axis=0
             )  # drop missing `reviewText` columns
             data = data.reset_index(drop=True)  # reset index
-            
+            self.logger.info(f"Finish cleaning data")
+
             # Data Labelling
             self.logger.info(f"Labeling Data ...")
             data["sentiment"] = data["overall"].apply(
-                lambda x: "positive" if x >= 3 else "negative"
+                lambda x: 1 if x >= 3 else 0
             )  # convert overall to sentiment
-            
+            self.logger.info(f"Finish labeling data")
+
             # Text Preprocessing
-            self.logger.info(f"Preprocessing Text ...")
+            self.logger.info(f"Preprocessing text ...")
             data["preprocessed_review_text"] = data["reviewText"].apply(
                 self.preprocess_text
             )  # preprocess text
@@ -94,18 +95,21 @@ class DataPreprocessStrategy(DataStrategy):
             data = data[
                 ["preprocessed_review_text", "sentiment"]
             ]  # select columns for model training
+            self.logger.info(f"Finish preprocessing text")
+
             return data
         except Exception as e:
             self.logger.warning(e)
-            
+
+
 class DataSplitStrategy(DataStrategy):
     def __init__(self) -> None:
         """
         Initialize `DataPreprocessStrategy` class
         """
         super().__init__()
-        self.logger = Logger(__name__).get_logger()
-        
+        self.logger = Logger.get_logger(__name__)
+
     def handle_data(self, data: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
         """Split data into training and validation
 
@@ -126,12 +130,13 @@ class DataSplitStrategy(DataStrategy):
         except Exception as e:
             self.logger.warning(e)
 
+
 class DataPreprocessing:
     def __init__(self, data: pd.DataFrame, strategy: DataStrategy):
         self.data = data
         self.strategy = strategy
-        self.logger = Logger(__name__).get_logger()
-    
+        self.logger = Logger.get_logger(__name__)
+
     def handle_data(self) -> Union[pd.DataFrame, pd.Series]:
         """_summary_
 
@@ -142,4 +147,3 @@ class DataPreprocessing:
             return self.strategy.handle_data(self.data)
         except Exception as e:
             self.logger.warning(e)
-        
