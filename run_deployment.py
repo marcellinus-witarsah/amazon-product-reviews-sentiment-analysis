@@ -6,6 +6,8 @@ from zenml.integrations.mlflow.model_deployers.mlflow_model_deployer import (
 )
 from zenml.integrations.mlflow.services import MLFlowDeploymentService
 
+from typing import cast
+
 DEPLOY = "deploy"
 PREDICT = "predict"
 DEPLOY_AND_PREDICT = "deploy_and_predict"
@@ -26,8 +28,9 @@ DEPLOY_AND_PREDICT = "deploy_and_predict"
     help="Minimum f1 score required to deploy the model",
 )
 def run_deployment(config: str, min_accuracy: float):
-    # getting the active deployed model
-    mlflow_model_deployer_component = MLFlowModelDeployer.get_active_model_deployer()
+    mlflow_model_deployer_component = (
+        MLFlowModelDeployer.get_active_model_deployer()
+    )  # getting the active deployed model
     deploy = config == DEPLOY or config == DEPLOY_AND_PREDICT
     predict = config == PREDICT or config == DEPLOY_AND_PREDICT
     if deploy:
@@ -35,12 +38,12 @@ def run_deployment(config: str, min_accuracy: float):
             data_path="data/interim/sampled-raw-data.csv",
             min_accuracy=0.8,
             workers=3,
-            timeout=60,
+            timeout=100,
         )
     if predict:
         pass
-    # print()
-    # check existing services
+
+    # check if there's any existing services
     existing_services = mlflow_model_deployer_component.find_model_server(
         pipeline_name="continuous_deployment_pipeline",
         pipeline_step_name="mlflow_model_deployer_step",
