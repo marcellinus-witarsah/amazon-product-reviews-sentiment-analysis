@@ -55,7 +55,7 @@ class CountVectorizerMultinomialNB(Model):
                     ("MultinomialNB", MultinomialNB(**params)),
                 ]
             )
-            model.fit(X_train["preprocessed_review_text"], y_train)
+            model.fit(X_train, y_train)
             self.logger.info("Finished model training")
             return model
         except Exception as e:

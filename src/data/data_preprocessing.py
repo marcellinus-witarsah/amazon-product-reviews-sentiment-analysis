@@ -69,14 +69,12 @@ class DataPreprocessStrategy(DataStrategy):
                 subset=["reviewText"], axis=0
             )  # drop missing `reviewText` columns
             data = data.reset_index(drop=True)  # reset index
-            self.logger.info(f"Finish cleaning data")
 
             # Data Labelling
             self.logger.info(f"Labeling Data ...")
             data["sentiment"] = data["overall"].apply(
                 lambda x: 1 if x >= 3 else 0
             )  # convert overall to sentiment
-            self.logger.info(f"Finish labeling data")
 
             # Text Preprocessing
             self.logger.info(f"Preprocessing text ...")
@@ -89,7 +87,6 @@ class DataPreprocessStrategy(DataStrategy):
             data = data[
                 ["preprocessed_review_text", "sentiment"]
             ]  # select columns for model training
-            self.logger.info(f"Finish preprocessing text")
 
             return data
         except Exception as e:
@@ -101,7 +98,6 @@ class DataSplitStrategy(DataStrategy):
         """
         Initialize `DataPreprocessStrategy` class
         """
-        super().__init__()
         self.logger = get_logger(__name__)
 
     def handle_data(self, data: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:
@@ -114,13 +110,18 @@ class DataSplitStrategy(DataStrategy):
             Union[pd.DataFrame, pd.Series]: train and validation data
         """
         try:
-            self.logger.info("Splitting Data ...")
+            self.logger.info("Splitting data ...")
             X = data.drop(columns=["sentiment"], axis=1)
             y = data["sentiment"]
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y, stratify=y, test_size=0.2, shuffle=True, random_state=42
             )
-            return X_train, X_test, y_train, y_test
+            return (
+                X_train.to_numpy().squeeze(),
+                X_test.to_numpy().squeeze(),
+                y_train.to_numpy().squeeze(),
+                y_test.to_numpy().squeeze(),
+            )
         except Exception as e:
             self.logger.warning(e)
 

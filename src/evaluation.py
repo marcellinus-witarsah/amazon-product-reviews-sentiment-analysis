@@ -31,9 +31,8 @@ class Accuracy(Evaluation):
         y_pred: Union[pd.DataFrame, pd.Series, np.ndarray],
     ) -> float:
         try:
-            self.logger.info("Calculate Accuracy Score ...")
+            self.logger.info("Calculate accuracy score ...")
             score = accuracy_score(y_true, y_pred)
-            self.logger.info("Finish Calculating Accuracy Score ...")
             return score
         except Exception as e:
             self.logger.warning(e)
@@ -49,9 +48,8 @@ class Recall(Evaluation):
         y_pred: Union[pd.DataFrame, pd.Series, np.ndarray],
     ) -> float:
         try:
-            self.logger.info("Calculate Recall Score ...")
+            self.logger.info("Calculate recall score ...")
             score = recall_score(y_true, y_pred)
-            self.logger.info("Finish Calculating Recall Score ...")
             return score
         except Exception as e:
             self.logger.warning(e)
@@ -67,9 +65,8 @@ class Precision(Evaluation):
         y_pred: Union[pd.DataFrame, pd.Series, np.ndarray],
     ) -> float:
         try:
-            self.logger.info("Calculate Precision Score ...")
+            self.logger.info("Calculate precision score ...")
             score = precision_score(y_true, y_pred)
-            self.logger.info("Finish Calculating Precision Score ...")
             return score
         except Exception as e:
             self.logger.warning(e)
@@ -85,9 +82,8 @@ class F1(Evaluation):
         y_pred: Union[pd.DataFrame, pd.Series, np.ndarray],
     ) -> float:
         try:
-            self.logger.info("Calculate F1 Score ...")
+            self.logger.info("Calculate f1 score ...")
             score = f1_score(y_true, y_pred)
-            self.logger.info("Finish Calculating F1 Score ...")
             return score
         except Exception as e:
             self.logger.warning(e)

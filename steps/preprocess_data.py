@@ -1,9 +1,10 @@
 import pandas as pd
+import numpy as np
 import os
 import sys
 from dotenv import find_dotenv, load_dotenv
 from zenml import step
-from typing import Tuple
+from typing import Tuple, Union
 from typing_extensions import Annotated
 
 load_dotenv(find_dotenv())
@@ -17,10 +18,10 @@ from src.data.data_preprocessing import DataPreprocessing
 def preprocess_data(
     data: pd.DataFrame,
 ) -> Tuple[
-    Annotated[pd.DataFrame, "X_train"],
-    Annotated[pd.DataFrame, "X_test"],
-    Annotated[pd.Series, "y_train"],
-    Annotated[pd.Series, "y_test"],
+    Annotated[Union[np.ndarray], "X_train"],
+    Annotated[Union[np.ndarray], "X_test"],
+    Annotated[Union[pd.Series, np.ndarray], "y_train"],
+    Annotated[Union[pd.Series, np.ndarray], "y_test"],
 ]:
     """
     Perform data preprocessing from data cleaning, data labeling, text preprocessing, and data splitting
